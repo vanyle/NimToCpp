@@ -1,21 +1,15 @@
-#? replace(sub = "\t", by = "  ")
-
 #[
 
 This file is able to convert Nim code to one single C file.
-It uses the nim compiler + gcc + magic to work.
+It uses the nim compiler + cursed magic to work.
 
 The goal is to use Nim to solve competitive programming challenges that only accept C/C++.
-
-Idea:
-
 
 We want to generate a small, portable blob of C code.
 
 1. We generate the corresponding C++ code.
   nim cpp -c -d:danger -d:useMalloc --nimcache:. --gc:none cses.nim
-2. We apply the preprocessor.
-  g++ -E .\@mcses.nim.c -O3 -I C:\Users\vanyle\.choosenim\toolchains\nim-1.6.6\lib -o out.c 
+2. Reorganize the includes
 3. We strip redundant symbols.
 4. Done! we rename the file properly!
 
@@ -45,7 +39,7 @@ proc countSymbol(l: string, c: char): int =
 when isMainModule:
   let c = paramCount()
   if c != 1:
-    echo "Usage: ./cses <input nim file>"
+    echo "Usage: ./nimtocpp <input nim file>"
     quit()
 
   let s = paramStr(1)
@@ -82,7 +76,6 @@ when isMainModule:
 
   # Merge everything together and include nimbase manually:
   removeDir(tmp_dirname)
-  #let nimbase_path = "C:/Users/vanyle/.choosenim/toolchains/nim-1.6.6/lib/nimbase.h"
   const nimbase_content = readFile("nimbase.h")
 
   var result = ""
@@ -125,14 +118,6 @@ when isMainModule:
         output.add(l & "\n")
 
     cppFiles[i] = output
-
-  #[
-
-  struct TGenericSeq
-  struct NimStringDesc : public TGenericSeq
-  static N_INLINE(void, nimCopyMem)(void* dest, void* source, NI size) {
-
-  ]#
 
   for i in cppFiles:
     result.add("\n// ---------\n")

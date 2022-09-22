@@ -19,7 +19,7 @@ Well, now, you can!
 To install:
 - Clone this repo. 
 - `nimble build -d:release`
-- Put the executable in your path.
+- Put the executable in your path with the `nimbase.h` file
 
 Use with: `NimToCpp <nim source file>`
 
